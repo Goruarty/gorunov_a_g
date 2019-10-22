@@ -1,7 +1,6 @@
 #ifndef COMPLEX_COMPLEX_H_102019
 #define COMPLEX_COMPLEX_H_102019
 
-#include <iosfwd>
 
 struct Complex {
   Complex() {}
