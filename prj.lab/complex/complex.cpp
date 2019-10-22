@@ -1,4 +1,5 @@
 #include "complex.h"
+#include <cmath>
 #include <iostream>
 
 Complex::Complex(const double real)
@@ -17,94 +18,76 @@ Complex& Complex::operator=(const double rhs) {
 }
 
 bool Complex::operator==(const Complex& rhs) const {
-  return ((fabs(re - rhs.re) < std::numeric_limits<double>::epsilon()) &&
-    (fabs(im - rhs.im) < std::numeric_limits<double>::epsilon()));
+  return ((abs(re - rhs.re) < std::numeric_limits<double>::epsilon()) &&
+    (abs(im - rhs.im) < std::numeric_limits<double>::epsilon()));
 }
 bool Complex::operator!=(const Complex& rhs) const {
   return !operator==(rhs);
 }
 
-Complex conj(const Complex& rhs) {
-  Complex conj_(rhs);
-  conj_.im *= (-1);
-  return conj_;
-}
-
+// сложение +=
 Complex& Complex::operator+=(const Complex& rhs) {
   re += rhs.re;
   im += rhs.im;
   return *this;
 }
 
+// сложение +
 Complex operator+(const Complex& lhs, const Complex& rhs) {
   return Complex(lhs.re + rhs.re, lhs.im + rhs.im);
 }
-
 Complex operator+(const Complex& lhs, const double rhs) {
   return Complex(lhs.re + rhs, lhs.im);
 }
-
 Complex operator+(const double lhs, const Complex& rhs) {
   return rhs + lhs;
 }
 
+// вычитание -=
 Complex& Complex::operator-=(const Complex& rhs) {
   re -= rhs.re;
   im -= rhs.im;
   return *this;
 }
 
+// вычитание -
 Complex operator-(const Complex& lhs, const Complex& rhs) {
   return Complex(lhs.re - rhs.re, lhs.im - rhs.im);
 }
-
 Complex operator-(const Complex& lhs, const double rhs) {
   return Complex(lhs.re - rhs, -lhs.im);
 }
-
 Complex operator-(const double lhs, const Complex& rhs) {
   return Complex(lhs - rhs.re, -rhs.im);
 }
 
+// умножение *=
 Complex& Complex::operator*=(const double rhs) {
   re *= rhs;
   im *= rhs;
   return *this;
 }
-
 Complex& Complex::operator*=(const Complex& rhs) {
-  double tmpre(re * rhs.re - im * rhs.im);
+  double n = re * rhs.re - im * rhs.im;
   im = re * rhs.im + im * rhs.re;
-  re = tmpre;
+  re = n;
   return *this;
 }
 
+// умножение *
 Complex operator*(const Complex& lhs, const Complex& rhs) {
-  Complex comp(lhs);
-  comp *= rhs;
-  return comp;
+  Complex mult(lhs);
+  mult *= rhs;
+  return mult;
 }
-
 Complex operator*(const Complex& lhs, const double rhs) {
   return Complex(lhs.re * rhs, lhs.im * rhs);
 }
-
 Complex operator*(const double lhs, const Complex& rhs) {
   return rhs * lhs;
 }
 
-Complex& Complex::operator/=(const Complex& rhs) {
-  double denum(rhs.re * rhs.re + rhs.im * rhs.im);
-  if (denum < std::numeric_limits<double>::epsilon()) {
-    throw std::invalid_argument("Divison by zero");
-  } else {
-    double tmpre((re * rhs.re + im * rhs.im) / denum);
-    im = (im * rhs.re - re * rhs.im) / denum;
-    re = tmpre;
-  }
-  return *this;
-}
-
+// деление /=
 Complex& Complex::operator/=(const double rhs) {
   if (rhs < std::numeric_limits<double>::epsilon()) {
     throw std::invalid_argument("Divison by zero");
@@ -114,23 +97,47 @@ Complex& Complex::operator/=(const double rhs) {
   }
   return *this;
 }
+Complex& Complex::operator/=(const Complex& rhs) {
+  double denum = rhs.re * rhs.re + rhs.im * rhs.im;
+  double n = (re * rhs.re + im * rhs.im) / denum;
+  if (denum < std::numeric_limits<double>::epsilon()) {
+    throw std::invalid_argument("Divison by zero");
+  } else {
+    im = (im * rhs.re - re * rhs.im) / denum;
+    re = n;
+  }
+  return *this;
+}
 
+// деление /
 Complex operator/(const Complex& lhs, const Complex& rhs) {
-  Complex div(lhs);
-  div /= rhs;
-  return div;
+  Complex divis(lhs);
+  divis /= rhs;
+  return divis;
 }
-
 Complex operator/(const Complex& lhs, const double rhs) {
-  Complex div(lhs);
-  div /= rhs;
-  return div;
+  Complex divis(lhs);
+  divis /= rhs;
+  return divis;
+}
+Complex operator/(const double lhs, const Complex& rhs) {
+  Complex divis(lhs);
+  divis /= rhs;
+  return divis;
 }
 
-Complex operator/(const double lhs, const Complex& rhs) {
-  Complex div(lhs);
-  div /= rhs;
-  return div;
+// комплексно-сопряженные
+Complex sopr(const Complex& rhs) {
+  Complex sopr(rhs);
+  sopr.im *= -1;
+  return sopr;
+}
+
+//степень (квадрат)
+Complex power(const Complex& rhs) {
+  Complex power(rhs);
+  power.im = pow(power.im, 2); //можно менять степень
+  return *this;
 }
 
 std::ostream& Complex::writeTo(std::ostream& ostrm) const {
@@ -143,7 +150,7 @@ std::istream& Complex::readFrom(std::istream& istrm) {
   double real = 0.0;
   char comma = '0';
   double imaginary = 0.0;
-  char rightBrace = 0;
+  char rightBrace = '0';
   istrm >> leftBrace >> real >> comma >> imaginary >> rightBrace;
   if (istrm.good()) {
     if ((Complex::leftBrace == leftBrace) && (Complex::separator == comma) &&
