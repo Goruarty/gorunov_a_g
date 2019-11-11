@@ -3,10 +3,10 @@
 
 #include <iostream>
 
-struct Complex {
+struct Complex{
   Complex() {}
-  explicit Complex(const double real);
   Complex(const Complex&) = default;
+  explicit Complex(const double real);
   Complex(const double real, const double imaginary);
   ~Complex() = default;
   Complex& operator=(const Complex&) = default;
@@ -33,6 +33,8 @@ struct Complex {
   static const char rightBrace { '}' };
 };
 
+Complex operator-(const Complex& lhs);
+
 Complex operator+(const Complex& lhs, const Complex& rhs);
 Complex operator+(const Complex& lhs, const double rhs);
 Complex operator+(const double lhs, const Complex& rhs);
@@ -49,8 +51,8 @@ Complex operator/(const Complex& lhs, const Complex& rhs);
 Complex operator/(const Complex& lhs, const double rhs);
 Complex operator/(const double lhs, const Complex& rhs);
 
-Complex sopr(const Complex& rhs);
-Complex power(const Complex& rhs);
+/*Complex sopr(const Complex& rhs);
+Complex power(const Complex& rhs); */
 
 inline std::ostream& operator<<(std::ostream& ostrm, const Complex& rhs) {
   return rhs.writeTo(ostrm);
@@ -59,6 +61,5 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Complex& rhs) {
 inline std::istream& operator>>(std::istream& istrm, Complex& rhs) {
   return rhs.readFrom(istrm);
 }
-
 
 #endif /* COMPLEX_H_ */

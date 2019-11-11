@@ -18,11 +18,16 @@ Complex& Complex::operator=(const double rhs) {
 }
 
 bool Complex::operator==(const Complex& rhs) const {
-  return ((abs(re - rhs.re) < std::numeric_limits<double>::epsilon()) &&
-    (abs(im - rhs.im) < std::numeric_limits<double>::epsilon()));
+  return ((fabs(re - rhs.re) <= std::numeric_limits<double>::epsilon()) &&
+    (fabs(im - rhs.im) <= std::numeric_limits<double>::epsilon()));
 }
+
 bool Complex::operator!=(const Complex& rhs) const {
   return !operator==(rhs);
+}
+
+Complex operator-(const Complex& lhs) {
+    return { -lhs.re, -lhs.im };
 }
 
 // сложение +=
@@ -55,7 +60,7 @@ Complex operator-(const Complex& lhs, const Complex& rhs) {
   return Complex(lhs.re - rhs.re, lhs.im - rhs.im);
 }
 Complex operator-(const Complex& lhs, const double rhs) {
-  return Complex(lhs.re - rhs, -lhs.im);
+  return Complex(lhs.re - rhs, lhs.im);
 }
 Complex operator-(const double lhs, const Complex& rhs) {
   return Complex(lhs - rhs.re, -rhs.im);
@@ -126,7 +131,7 @@ Complex operator/(const double lhs, const Complex& rhs) {
   return divis;
 }
 
-// комплексно-сопряженные
+/* // комплексно-сопряженные
 Complex sopr(const Complex& rhs) {
   Complex sopr(rhs);
   sopr.im *= -1;
@@ -137,8 +142,8 @@ Complex sopr(const Complex& rhs) {
 Complex power(const Complex& rhs) {
   Complex power(rhs);
   power.im = pow(power.im, 2); //можно менять степень
-  return *this;
-}
+  return power;
+} */
 
 std::ostream& Complex::writeTo(std::ostream& ostrm) const {
   ostrm << leftBrace << re << separator << im << rightBrace;

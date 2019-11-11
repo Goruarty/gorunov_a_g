@@ -19,6 +19,16 @@ int LCM (int a, int b){
 	return (a*b)/GCD(a,b);
 }
 
+void Rational::normalize() {
+    if (denum_ < 0) {
+        num_ *= -1;
+        denum_ *= -1;
+    }
+    int a = GCD(abs(num_),abs(denum_));
+    num_/=a;
+    denum_/=a;
+}
+
 Rational::Rational(const int num)
   : Rational(num, 1){
 }
@@ -26,30 +36,24 @@ Rational::Rational(const int num)
 Rational::Rational(const int num, const int denum)
   : num_(num)
   , denum_(denum) {
-  if (0 == denum_) {
-    throw std::invalid_argument("Rational ctor - zero denuminator.");
+  if (denum_ == 0) {
+    throw std::invalid_argument("zero denuminator!");
   }
-  normalize();
+  else normalize();
 }
-
-void Rational::normalize() {
-  if (denum_ < 0) {
-    num_ *= -1;
-    denum_ *= -1;
-  }
-  int a = GCD(abs(num_),abs(denum_));
-  num_/=a;
-  denum_/=a;
-}
-
 
 // ввод и вывод
+std::ostream& Rational::write_to(std::ostream& ostrm) const {
+    ostrm << num_ << delimiter_ << denum_;
+    return ostrm;
+}
+
 std::istream& Rational::read_from(std::istream& istrm) {
   int numerator(0);
   char delimiter('0');
   int denuminator(0);
   istrm >> numerator >> delimiter >> denuminator;
-  if (denuminator==0) throw std::invalid_argument("operation is impossible!");
+  if (denuminator==0) throw std::invalid_argument("zero denuminator!");
   else {
 	  try {
           if (delimiter==Rational::delimiter_){
@@ -64,12 +68,6 @@ std::istream& Rational::read_from(std::istream& istrm) {
   return istrm;
 }
 
-std::ostream& Rational::write_to(std::ostream& ostrm) const {
-  ostrm << num_ << delimiter_ << denum_;
-  return ostrm;
-}
-
-
 //  операторы сравнения (и присваивания)
 Rational& Rational::operator=(const int rhs) {
   num_ = rhs;
@@ -78,13 +76,13 @@ Rational& Rational::operator=(const int rhs) {
 }
 
 bool Rational::operator==(const Rational& rhs) const {
-  return num_ == rhs.num_ && denum_ == rhs.denum_;
+  return ((num_ == rhs.num_) && (denum_ == rhs.denum_));
 }
 
 bool Rational::operator!=(const Rational& rhs) const {
   return !operator==(rhs);
 }
-
+/*
 bool Rational::operator<(const Rational& rhs) const {
   int up1 = num_ * rhs.denum_;
   int up2 = denum_ * rhs.num_;
@@ -103,19 +101,17 @@ bool Rational::operator>(const Rational& rhs) const {
 
 bool Rational::operator>=(const Rational& rhs) const {
   return !operator<(rhs);
-}
+} */
 // << >>
-std::istream& operator>>(std::istream& istrm, Rational& r) {
-  return r.read_from(istrm);
-}
-
 std::ostream& operator<<(std::ostream& ostrm, const Rational& r) {
   return r.write_to(ostrm);
 }
 
+std::istream& operator>>(std::istream& istrm, Rational& r) {
+    return r.read_from(istrm);
+}
 
 // арифметические операторы
-
 
 //// "+ += " ////
 Rational& Rational::operator+=(const Rational& rhs){
@@ -201,7 +197,7 @@ Rational operator*(const int lhs, const Rational& rhs){
 //// "/ /= " ////
 Rational& Rational::operator/=(const Rational& rhs){
 	if (rhs.num_==0)
-		throw std::invalid_argument("operation is impossible!");
+		throw std::invalid_argument("zero denuminator!");
 	else {
 		num_ *= rhs.denum_;
 		denum_ *= rhs.num_;
@@ -229,7 +225,9 @@ Rational operator/(const int lhs, const Rational& rhs){
 } */
 
 
-
+Rational operator-(const Rational& lhs) {
+    return 0 - lhs;
+}
 
 
 

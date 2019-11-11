@@ -16,7 +16,6 @@ public:
   Rational& operator=(const Rational&) = default;
   Rational& operator=(const int rhs);
 
-  //Rational operator-(const Rational& rhs) const; //????
   Rational& operator+=(const Rational& rhs); //+
   Rational& operator+=(const int rhs) { return operator+=(Rational(rhs)); }
   Rational& operator-=(const Rational& rhs); //+
@@ -28,14 +27,13 @@ public:
 
   bool operator==(const Rational& rhs) const; // +
   bool operator!=(const Rational& rhs) const; // +
-  bool operator<(const Rational& rhs) const; // +
-  bool operator<=(const Rational& rhs) const; // +
-  bool operator>(const Rational& rhs) const; // +
-  bool operator>=(const Rational& rhs) const; // +
+ // bool operator<(const Rational& rhs) const; // +
+ // bool operator<=(const Rational& rhs) const; // +
+ // bool operator>(const Rational& rhs) const; // +
+ // bool operator>=(const Rational& rhs) const; // +
 
-
-  std::istream& read_from(std::istream& istrm);
   std::ostream& write_to(std::ostream& ostrm) const;
+  std::istream& read_from(std::istream& istrm);
 
 private:
   void normalize();
@@ -68,4 +66,5 @@ Rational operator/(const Rational& lhs, const int rhs);
 Rational operator/(const int lhs, const Rational& rhs);
 //Rational operator/(const int lhs, const int rhs);
 
+Rational operator-(const Rational& rhs);
 #endif

@@ -1,12 +1,22 @@
-#include "rational.h"
+#include "rational/rational.h"
 #include <iostream>
 #include <sstream>
 #include <exception>
 
-/*bool testParse() {
-
-
-
+/*bool testParse(const std::string& str) {
+    std::istringstream istrm(str);
+    Rational z;
+    try {
+        istrm >> z;
+        if (!istrm.fail()) {
+            std::cout << "Read succes: " << str << " -> " << z << std::endl;
+        } else {
+            std::cout << "Read error: " << str << " -> " << z << std::endl;
+        }
+    } catch (std::invalid_argument){
+        std::cout << "Read error: " << str << " -> " << "Division by zero is catched";
+    }
+    return istrm.good();
 } */
 
 int main() {
@@ -28,7 +38,7 @@ int main() {
 	    (n == d ? "yes" : "no") << std::endl;
 	  std::cout << n << " != " << d << " " <<
 	    (n != d ? "yes" : "no") << std::endl;
-
+/*
 	  std::cout << n << " <= " << d << " " <<
 	    (n <= d ? "yes" : "no") << std::endl;
 	  std::cout << n << " >= " << d << " " <<
@@ -37,7 +47,7 @@ int main() {
 	    (n < d ? "yes" : "no") << std::endl;
 	  std::cout << n << " > " << d << " " <<
 	    (n > d ? "yes" : "no") << std::endl;
-
+*/
 	  n = Rational(3, 5);
 	  std::cout << n;
 	  n += Rational(8, 3);
@@ -55,7 +65,7 @@ int main() {
 	  std::cout << " *= -8 " << n << std::endl;
 	  std::cout << n;
 	  n *= Rational(-5, -7);
-	  std::cout << " *= -1 * 5/7 " << n << std::endl;
+	  std::cout << " *= (-5)/(-7) " << n << std::endl;
 	  std::cout << n;
 	  n /= -4;
 	  std::cout << " /= -4 " << n << std::endl;
@@ -81,14 +91,21 @@ int main() {
 	  std::cout << std::endl;
 
 	  n = Rational(-17, -5);
+      try{
 	  std::cout << "n / 0/7 = ";
 	    std::cout << n / Rational(0, 7) << std::endl;
+      } catch (std::exception& ex){
+        std::cout << ex.what() << std::endl;
+      }
+      try {
 	  std::cout << "7/0 = ";
 	    std::cout << Rational(7,0);
 	  std::cout << std::endl;
-
+      } catch (std::exception& ex) {
+         std::cout << ex.what() << std::endl;
+      }
   } catch (std::exception& ex){
-	std::cout << ex.what();
+	std::cout << ex.what() << std::endl;
   }
   return 0;
 }

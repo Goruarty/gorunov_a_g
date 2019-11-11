@@ -1,9 +1,9 @@
-#include "complex.h"
+#include "complex/complex.h"
 #include <iostream>
 #include <sstream>
 #include <string>
 
-bool testParse(const std::string& str) {
+ bool testParse(const std::string& str) {
   std::istringstream istrm(str);
   Complex z;
   istrm >> z;
@@ -72,7 +72,7 @@ int main() {
   z /= 8.9;
   std::cout << " /= 8.9 " << z << std::endl;
   
-  // sopr
+ /* // sopr
   z = Complex(5, 5);
   std::cout << z;
   z = sopr(z);
@@ -82,14 +82,13 @@ int main() {
   z = Complex(7, 4);
   std::cout << z;
   z = power(z);
-  std::cout << "pow" << z << std::endl;
+  std::cout << "pow" << z << std::endl; */
   
   z = Complex(9, -9); y = Complex(-8, 8);
   std::cout << "(9,-9) + (-8,8) " << z + y << std::endl;
   std::cout << "(9,-9) - (-8,8) " << z - y << std::endl;
   std::cout << "(9,-9) * (-8,8) " << z * y << std::endl;
   std::cout << "(9,-9) / (-8,8) " << z / y << std::endl;
-  std::cout << ;
   try {
     std::cout << "z / 0 = " << z / 0 << std::endl;
   }
